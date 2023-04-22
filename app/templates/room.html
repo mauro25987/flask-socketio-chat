@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block title %}Room{% endblock %}
+{% block head %}
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+{% endblock %}
+{% block body %}
+    Room Name {{ room }}
+    <ul id="messages"></ul>
+    <input type="text" id="myMsg">
+    <button id="send">Send</button>
+    
+    <script type="text/javascript" charset="utf-8">
+        document.addEventListener('DOMContentLoaded', () => {
+            const send = document.getElementById('send')
+            const msg = document.getElementById('myMsg')
+
+            var socket = io();
+            
+            send.addEventListener('click', () => {
+                console.log(msg.value)
+                socket.emit('message', {'user': '{{ user }}', 'msg': msg.value})
+                msg.value = ''
+            });
+            
+            socket.on('connect', () => {
+               socket.emit('join', {user: "{{ user }}", room: "{{ room }}"})
+            }); 
+            
+            socket.on('message', (data) => {
+                console.log(data)
+                const li = document.createElement('li')
+                li.innerHTML = `<b>${data.user}</b> - <span>${data.msg}</span>`      
+                messages.appendChild(li)
+            });
+        });
+    </script>
+{% endblock %}

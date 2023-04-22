@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block title %}Index{% endblock %}
+{% block head %}{% endblock %}
+{% block body %}
+    <form action="{{ url_for('chat.index') }}" method="post">
+        {{ form.user.label }}{{ form.user() }}{% for error in form.user.errors %}{{ error }}{% endfor %}
+        {{ form.room.label }}{{ form.room() }}{% for error in form.room.errors %}{{ error }}{% endfor %}
+        {{ form.send() }}
+    </form>
+{% endblock %}
