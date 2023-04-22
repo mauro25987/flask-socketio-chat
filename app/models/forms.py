@@ -4,6 +4,6 @@ from wtforms import StringField, SubmitField
 
 
 class LoginForm(FlaskForm):
-    user = StringField('user', validators=[InputRequired()])
-    room = StringField('room', validators=[InputRequired()])
-    send = SubmitField('join')
+    user = StringField('User', validators=[InputRequired()])
+    room = StringField('Room', validators=[InputRequired()])
+    send = SubmitField('Join')
