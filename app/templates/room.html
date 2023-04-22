@@ -2,18 +2,29 @@
 
 {% block title %}Room{% endblock %}
 {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='room.css') }}">
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 {% endblock %}
 {% block body %}
     Room Name {{ room }}
-    <ul id="messages"></ul>
-    <input type="text" id="myMsg">
-    <button id="send">Send</button>
     
+    <div class="table" style="border: 1px solid #000;">
+        <div class="tbody">
+            <div class="trow">
+                <div class="tcell" id="messages"></div>
+                <div class="tcell" id="members"></div>
+            </div>
+        </div>
+    </div>
+    <input type="text" id="myMsg">
+    <button id="send">row</button>
+ 
     <script type="text/javascript" charset="utf-8">
         document.addEventListener('DOMContentLoaded', () => {
-            const send = document.getElementById('send')
-            const msg = document.getElementById('myMsg')
+            const messages = document.getElementById('messages');
+            const members = document.getElementById('members');
+            const send = document.getElementById('send');
+            const msg = document.getElementById('myMsg');
 
             var socket = io();
             
@@ -25,13 +36,20 @@
             
             socket.on('connect', () => {
                socket.emit('join', {user: "{{ user }}", room: "{{ room }}"})
+               // socket.emit('member_connected', {room: "{{ room }}"})
             }); 
             
             socket.on('message', (data) => {
-                console.log(data)
-                const li = document.createElement('li')
-                li.innerHTML = `<b>${data.user}</b> - <span>${data.msg}</span>`      
-                messages.appendChild(li)
+                const div = document.createElement('div')
+                if( data.user && data.msg ) {
+                    div.innerHTML = `<b>${data.user}</b> - <span>${data.msg}</span>`
+                    messages.appendChild(div)
+                }
+                else {
+                    members.innerHTML = ''
+                    div.innerHTML = `<b>${data.members}</b> - <span>${data.connected}</span>`
+                    members.appendChild(div)
+                }
             });
         });
     </script>

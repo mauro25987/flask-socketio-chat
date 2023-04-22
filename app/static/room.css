@@ -1,0 +1,23 @@
+.table{
+	display: table;
+	width: 80%;
+}
+
+.trow {
+	display: table-row;
+    width: 100%;
+}
+
+.tcell {
+	border: 1px solid #999999;
+	display: table-cell;
+	padding: 3px 10px;
+}
+
+.tbody {
+	display: table-row-group;
+}
+
+input {
+    width: 30%;
+}

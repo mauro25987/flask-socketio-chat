@@ -36,6 +36,10 @@ def join(data):
         rooms[room]['members'].append(user)
     join_room(room)
     send({'user': user, 'msg': 'entro a la sala'}, to=room)
+    send({
+        'members': rooms[room]['members'],
+        'connected': rooms[room]['connected']
+    }, to=room)
 
 
 @socketio.event
@@ -52,10 +56,20 @@ def disconnect():
     leave_room(room)
     session.clear()
     send({'user': user, 'msg': 'dejo la sala'}, to=room)
+    send({
+        'members': rooms[room]['members'],
+        'connected': rooms[room]['connected']
+    }, to=room)
+
+
+@socketio.event
+def member_disconnected(data):
+    members = rooms[data['room']]['members']
+    connected = rooms[data['room']]['connected']
+    send({'members': members, 'connected': connected}, to=data['room'])
 
 
 @socketio.event
 def message(data):
     room = session.get('room')
     send({'user': data['user'], 'msg': data['msg']}, to=room)
-    send({'user': rooms[room]['members'], 'msg': rooms[room]['connected']})
