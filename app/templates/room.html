@@ -30,7 +30,7 @@
             
             send.addEventListener('click', () => {
                 console.log(msg.value)
-                socket.emit('message', {'user': '{{ user }}', 'msg': msg.value})
+                socket.emit('message', {'user': '{{ user }}', 'room': "{{ room }}", 'msg': msg.value})
                 msg.value = ''
             });
             

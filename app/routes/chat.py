@@ -63,13 +63,5 @@ def disconnect():
 
 
 @socketio.event
-def member_disconnected(data):
-    members = rooms[data['room']]['members']
-    connected = rooms[data['room']]['connected']
-    send({'members': members, 'connected': connected}, to=data['room'])
-
-
-@socketio.event
 def message(data):
-    room = session.get('room')
-    send({'user': data['user'], 'msg': data['msg']}, to=room)
+    send({'user': data['user'], 'msg': data['msg']}, to=data['room'])
