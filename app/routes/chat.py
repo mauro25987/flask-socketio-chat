@@ -45,12 +45,7 @@ def join(data):
 @socketio.event
 def disconnect():
     room, user = session.get('room'), session.get('user')
-    if room not in rooms:
-        rooms[room] = {
-            'connected': 1,
-            'members': [user, ]
-        }
-    else:
+    if user in rooms[room]['members']:
         rooms[room]['connected'] -= 1
         rooms[room]['members'].remove(user)
     leave_room(room)
